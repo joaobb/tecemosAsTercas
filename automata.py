@@ -5,12 +5,15 @@ def automataParser(states, initial, final, word, autamataDescription):
     print(final)
     print(word)
 
-    current = initial
+    current = (initial)
     result  = ""
     
     for l in word:
+        
+
         print(autamataDescription[current][int(l)])
         current = autamataDescription[current][int(l)]
+        
         print("l: ", l)
         print("Current: ",current)
 
