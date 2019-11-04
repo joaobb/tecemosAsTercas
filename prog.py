@@ -52,10 +52,14 @@ def wordParser(states, initial, final, transitions, word):
 
     for index in range(len(word)):
         for currentState in currentStates:    
-            if (currentState in transitions)and (word[index] in transitions[currentState]):
+
+            if (currentState in transitions) and (word[index] in transitions[currentState]):
+                if 'e' in transitions[currentState]:
+                    currentStates.extend(transitions[currentState]['e'])
                 newCurrentStates.extend(transitions[currentState][word[index]])
 
-        print("{} {: >25}".format(", ".join(currentStates), word[index:]))
+        currentStates.sort()
+        print("{} {:>25}".format(", ".join(currentStates), word[index:]))
 
         currentStates = newCurrentStates
         newCurrentStates = []
