@@ -48,16 +48,19 @@ def wordParser(states, initial, final, transitions, word):
     newCurrentStates = []
     accepted = "não "
 
-    print("{} {: >20}".format("Estados", "Palavra"))
+    print("{} {: >25}".format("Estados", "Palavra"))
 
     for index in range(len(word)):
-        for currentState in currentStates:
-            newCurrentStates.append(transitions[currentState][word[index]][0])
+        for currentState in currentStates:    
+            if (currentState in transitions)and (word[index] in transitions[currentState]):
+                newCurrentStates.extend(transitions[currentState][word[index]])
 
-        print("{} {: >20}".format(currentStates, word[index:]))
+        print("{} {: >25}".format(", ".join(currentStates), word[index:]))
 
         currentStates = newCurrentStates
         newCurrentStates = []
+
+    print("{} {: >25}".format(", ".join(currentStates), 'e'))
 
     for states in currentStates:
         if states in final and accepted != "":
@@ -74,6 +77,5 @@ print("States: ", states)
 print("Initial: ", initial)
 print("Final: ", final)
 print("Transition: ", transitions)
-
 
 print(wordParser(states, initial, final, transitions, word))

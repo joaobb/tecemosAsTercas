@@ -1,0 +1,12 @@
+//Todos os blocos de 1 em W são de comprimento impar
+estados A, B, C, D
+inicial A
+aceita A, B
+A A 0
+A B 1
+B C 1
+B A 0
+C D 0
+C B 1
+D D 0
+D D 1
