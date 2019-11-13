@@ -1,4 +1,5 @@
-import sys
+# coding: utf-8
+
 import re
 
 # f=open("ex.txt", "r")
@@ -73,13 +74,4 @@ def wordParser(states, initial, final, transitions, word):
     return "\nA palavra {}foi aceita".format(accepted)
 
 
-states, initial, final, transitions = fileParser(sys.argv[1])
 
-word = sys.argv[2]
-
-print("States: ", states)
-print("Initial: ", initial)
-print("Final: ", final)
-print("Transition: ", transitions)
-
-print(wordParser(states, initial, final, transitions, word))
