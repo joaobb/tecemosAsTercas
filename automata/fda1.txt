@@ -1,7 +1,7 @@
-estados A, B
-inicial A
-aceita B
-A B 0
-B A 0
-A A 1
-B B 1
+estados E, P
+inicial E
+aceita P
+E P 0
+P E 0
+E E 1
+P P 1
