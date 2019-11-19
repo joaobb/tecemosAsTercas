@@ -1,6 +1,23 @@
 import prog
 import sys
+import util
 
+# Recebe um AFND e transforma para AFD
+# def transform(param_1):
+
+# param_1: AFD
+def complemento(param_1):
+    states, initial, final, transitions = prog.fileParser(param_1)
+
+    states_c = states
+    initial_c = initial
+    final_c = util.myFilter(states, final)
+    transitions_c = transitions
+    print("O complemento do automato é: ")
+    util.infoAutomata(states_c, initial_c, final_c, transitions_c)
+
+# param_1: AFD1
+# param_2: AFD2
 def union(param_1, param_2):
     # Coletando informações sobre os dois automatos.
     states, initial, final, transitions = prog.fileParser(param_1)
@@ -31,10 +48,7 @@ def union(param_1, param_2):
     transitions_u.update(transitions_2)
     
     print("Novo automato gerado pela Uniao:")
-    print("States: ", states_u)
-    print("Initial: ", initial_u)
-    print("Final: ", final_u)
-    print("Transition: ", transitions_u)
+    util.infoAutomata(states_u, initial_u, final_u, transitions_u)
 
 def main():
 
@@ -58,7 +72,7 @@ def main():
     # Tira o menos e reconhece com Upper ou Lower case.
     option = option.split('-')[1]
     if (option.lower() == 'c'):
-        pass
+        complemento(param1)
     
     elif (option.lower() == 'e'):
         pass
@@ -72,14 +86,7 @@ def main():
     elif (option.lower() == 's'):
         word = param2
         states, initial, final, transitions = prog.fileParser(param1)
-        print("States: ", states)
-        print(type(states))
-        print("Initial: ", initial)
-        print(type(initial))
-        print("Final: ", final)
-        print(type(final))
-        print("Transition: ", transitions)
-        print(type(transitions))
+        util.infoAutomata(states, initial, final, transitions)
         print(prog.wordParser(states, initial, final, transitions, word))
     
     elif (option.lower() == 't'):
