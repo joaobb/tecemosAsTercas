@@ -3,7 +3,6 @@ import sys
 import util
 
 # Recebe um AFND e transforma para AFD
-# def transform(param_1):
 
 # param_1: AFD
 def complemento(param_1):
@@ -15,6 +14,26 @@ def complemento(param_1):
     transitions_c = transitions
     print("O complemento do automato é: ")
     util.infoAutomata(states_c, initial_c, final_c, transitions_c)
+
+# AFD
+def star(param_1):
+    pass
+
+# param_1: AFD1
+# param_2: AFD2
+def intersection(param_1, param_2):
+    pass
+
+# param_1: AFD
+# param_2: word
+def simulator(param_1, param_2):
+    word = param_2
+    states, initial, final, transitions = prog.fileParser(param_1)
+    util.infoAutomata(states, initial, final, transitions)
+    print(prog.wordParser(states, initial, final, transitions, word))
+
+def transform(param_1):
+    pass
 
 # param_1: AFD1
 # param_2: AFD2
@@ -49,6 +68,7 @@ def union(param_1, param_2):
     
     print("Novo automato gerado pela Uniao:")
     util.infoAutomata(states_u, initial_u, final_u, transitions_u)
+ 
 
 def main():
 
@@ -75,22 +95,19 @@ def main():
         complemento(param1)
     
     elif (option.lower() == 'e'):
-        pass
+        star()
     
     elif (option.lower() == 'h'):
-        pass
+        util.myHelp()
 
     elif (option.lower() == 'i'):
-        pass
+        intersection(param1, param2)
     
     elif (option.lower() == 's'):
-        word = param2
-        states, initial, final, transitions = prog.fileParser(param1)
-        util.infoAutomata(states, initial, final, transitions)
-        print(prog.wordParser(states, initial, final, transitions, word))
-    
+        simulator(param1, param2)
+        
     elif (option.lower() == 't'):
-        pass
+        transform(param1)
     
     elif (option.lower() == 'u'):
         union(param1, param2)
