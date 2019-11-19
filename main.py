@@ -15,9 +15,17 @@ def complemento(param_1):
     print("O complemento do automato é: ")
     util.infoAutomata(states_c, initial_c, final_c, transitions_c)
 
-# AFD
+# param_1: AFD
 def star(param_1):
-    pass
+    states, initial, final, transitions = prog.fileParser(param_1)
+
+    new_state = 'q0'
+    states_e = [new_state] + states
+    initial_e = new_state
+    final_e = [new_state] + final
+    transitions_e = util.operationTransition(new_state, initial, transitions, final)
+    print("Novo automato pos operacao estrela: ")
+    util.infoAutomata(states_e, initial_e, final_e, transitions_e)
 
 # param_1: AFD1
 # param_2: AFD2
@@ -95,7 +103,7 @@ def main():
         complemento(param1)
     
     elif (option.lower() == 'e'):
-        star()
+        star(param1)
     
     elif (option.lower() == 'h'):
         util.myHelp()
