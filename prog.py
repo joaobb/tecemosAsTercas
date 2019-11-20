@@ -45,15 +45,19 @@ def fileParser(fileName):
 
 
 def wordParser(states, initial, final, transitions, word):
+    #Define o estado atual, como o estado inicial do automato
     currentStates = [initial]
+    #Variável que terá serventia de atualizar a variavel acima após iteração
     newCurrentStates = []
+    #Apresenta o estado da palavra como aceito ou não.
     accepted = "não "
 
     print("{} {: >25}".format("Estados", "Palavra"))
 
+    #Iteração sobre a palavra
     for index in range(len(word)):
+        #Iteração sobre todos os estados atuais (para que seja possível utilizar em uma AFN)
         for currentState in currentStates:    
-
             if (currentState in transitions) and (word[index] in transitions[currentState]):
                 if 'e' in transitions[currentState]:
                     currentStates.extend(transitions[currentState]['e'])
@@ -73,5 +77,12 @@ def wordParser(states, initial, final, transitions, word):
 
     return "\nA palavra {}foi aceita".format(accepted)
 
-
-
+def afn_checker(transitions):
+    for transition in transitions:
+        if "e" in transitions[transition]:
+            return True;
+        for letter in transitions[transition]: 
+            if len(transitions[transition][letter]) > 1:
+                return True;
+    
+    return False

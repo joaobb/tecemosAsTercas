@@ -41,6 +41,8 @@ def simulator(param_1, param_2):
     print(prog.wordParser(states, initial, final, transitions, word))
 
 def transform(param_1):
+    states, initial, final, transitions = prog.fileParser(param_1)
+    print(prog.afn_checker(transitions))
     pass
 
 # param_1: AFD1
