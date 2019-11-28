@@ -2,7 +2,6 @@ import prog
 import sys
 import util
 
-# Recebe um AFND e transforma para AFD
 
 # param_1: AFD
 def complemento(param_1):
@@ -30,7 +29,34 @@ def star(param_1):
 # param_1: AFD1
 # param_2: AFD2
 def intersection(param_1, param_2):
-    pass
+    states, initial, final, transitions = prog.fileParser(param_1)
+    states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2)
+
+    # Inicializando as variáveis
+    states_i, initial_i, final_i, transitions_i = [], '', [], {}
+
+    initial_i = initial + initial_2
+
+    for estado_afd1 in states:
+        for estado_afd2 in states_2:
+            states_i.append(estado_afd1 + estado_afd2)
+            if(estado_afd1 in final and estado_afd2 in final_2):
+                final_i.append(estado_afd1 + estado_afd2)
+
+    for keys_1 in transitions:
+        for keys_2 in transitions_2:
+            new_state = keys_1+keys_2
+            transitions_i[new_state] = {
+                '1':[transitions[keys_1]['1'][0]+ transitions_2[keys_2]['1'][0]],
+                '0':[transitions[keys_1]['0'][0]+ transitions_2[keys_2]['0'][0]]
+            }
+
+    print("Novo automato pos operacao de Interseccao: ")
+    util.infoAutomata(states_i, initial_i, final_i, transitions_i)
+
+
+
+
 
 # param_1: AFD
 # param_2: word
@@ -40,6 +66,8 @@ def simulator(param_1, param_2):
     util.infoAutomata(states, initial, final, transitions)
     print(prog.wordParser(states, initial, final, transitions, word))
 
+
+# Recebe um AFND e transforma para AFD
 def transform(param_1):
     states, initial, final, transitions = prog.fileParser(param_1)
     print(prog.afn_checker(transitions))
@@ -82,7 +110,7 @@ def union(param_1, param_2):
 
 def main():
 
-    option = param1 = param2 = ''
+    option = paratransitions = paratransitions_2 = ''
     # Se tiver mais de um arg, eh entendido que o primeiro arg 
     # tratasse da opcao desejada.
     if (len(sys.argv) > 1):
@@ -92,35 +120,35 @@ def main():
     
     # Casos que recebem a opcao desejada e dois parametros.
     if (len(sys.argv) > 3):
-        param1 = sys.argv[2]
-        param2 = sys.argv[3]
+        paratransitions = sys.argv[2]
+        paratransitions_2 = sys.argv[3]
     
     # Casos que recebem apenas a opcao desejada e um parametro.
     elif (len(sys.argv) > 2):
-        param1 = sys.argv[2]
+        paratransitions = sys.argv[2]
     
     # Tira o menos e reconhece com Upper ou Lower case.
     option = option.split('-')[1]
     if (option.lower() == 'c'):
-        complemento(param1)
+        complemento(paratransitions)
     
     elif (option.lower() == 'e'):
-        star(param1)
+        star(paratransitions)
     
     elif (option.lower() == 'h'):
         util.myHelp()
 
     elif (option.lower() == 'i'):
-        intersection(param1, param2)
+        intersection(paratransitions, paratransitions_2)
     
     elif (option.lower() == 's'):
-        simulator(param1, param2)
+        simulator(paratransitions, paratransitions_2)
         
     elif (option.lower() == 't'):
-        transform(param1)
+        transform(paratransitions)
     
     elif (option.lower() == 'u'):
-        union(param1, param2)
+        union(paratransitions, paratransitions_2)
 
     else:
         print ('Opcao invalida!')
