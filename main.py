@@ -32,17 +32,19 @@ def intersection(param_1, param_2):
     states, initial, final, transitions = prog.fileParser(param_1)
     states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2)
 
-    # Inicializando as variáveis
+    # Inicializando as variaveis
     states_i, initial_i, final_i, transitions_i = [], '', [], {}
 
     initial_i = initial + initial_2
 
+    # Seta os valores dos estados e estado final
     for estado_afd1 in states:
         for estado_afd2 in states_2:
             states_i.append(estado_afd1 + estado_afd2)
             if(estado_afd1 in final and estado_afd2 in final_2):
                 final_i.append(estado_afd1 + estado_afd2)
 
+    # Setar as transicoes
     for keys_1 in transitions:
         for keys_2 in transitions_2:
             new_state = keys_1+keys_2
@@ -110,7 +112,7 @@ def union(param_1, param_2):
 
 def main():
 
-    option = paratransitions = paratransitions_2 = ''
+    option = arq_automata = arq_automata_2 = ''
     # Se tiver mais de um arg, eh entendido que o primeiro arg 
     # tratasse da opcao desejada.
     if (len(sys.argv) > 1):
@@ -120,35 +122,35 @@ def main():
     
     # Casos que recebem a opcao desejada e dois parametros.
     if (len(sys.argv) > 3):
-        paratransitions = sys.argv[2]
-        paratransitions_2 = sys.argv[3]
+        arq_automata = sys.argv[2]
+        arq_automata_2 = sys.argv[3]
     
     # Casos que recebem apenas a opcao desejada e um parametro.
     elif (len(sys.argv) > 2):
-        paratransitions = sys.argv[2]
+        arq_automata = sys.argv[2]
     
     # Tira o menos e reconhece com Upper ou Lower case.
     option = option.split('-')[1]
     if (option.lower() == 'c'):
-        complemento(paratransitions)
+        complemento(arq_automata)
     
     elif (option.lower() == 'e'):
-        star(paratransitions)
+        star(arq_automata)
     
     elif (option.lower() == 'h'):
         util.myHelp()
 
     elif (option.lower() == 'i'):
-        intersection(paratransitions, paratransitions_2)
+        intersection(arq_automata, arq_automata_2)
     
     elif (option.lower() == 's'):
-        simulator(paratransitions, paratransitions_2)
+        simulator(arq_automata, arq_automata_2)
         
     elif (option.lower() == 't'):
-        transform(paratransitions)
+        transform(arq_automata)
     
     elif (option.lower() == 'u'):
-        union(paratransitions, paratransitions_2)
+        union(arq_automata, arq_automata_2)
 
     else:
         print ('Opcao invalida!')
