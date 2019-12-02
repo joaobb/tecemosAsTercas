@@ -1,7 +1,7 @@
 import prog
 import sys
 import util
-
+from random import randint
 
 # param_1: AFD
 def complemento(param_1):
@@ -29,36 +29,35 @@ def star(param_1):
 # param_1: AFD1
 # param_2: AFD2
 def intersection(param_1, param_2):
-    states, initial, final, transitions = prog.fileParser(param_1)
-    states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2)
+    # Automato 1
+    states_1, initial_1, final_1, transitions_1 = prog.fileParser(param_1, 1)
+    # Automato 2
+    states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2, 2)
 
-    # Inicializando as variaveis
-    states_i, initial_i, final_i, transitions_i = [], '', [], {}
+    # A união dos automatos resulta na uniao de seus estados
+    new_states = states_1 + states_2
+    # O estado inicial do resultado da uniao eh o estado inicial do primeiro
+    new_initial= initial_1
+    # O estado de aceitacao do resultado da uniao eh o estado final do segunda
+    new_final = final_2
+    # As transicoes do novo automato gerado pela uniao eh constituida das transicoes de ambos,
+    # com algumas alteracoes
+    transitions_1.update(transitions_2)
 
-    initial_i = initial + initial_2
-
-    # Seta os valores dos estados e estado final
-    for estado_afd1 in states:
-        for estado_afd2 in states_2:
-            states_i.append(estado_afd1 + estado_afd2)
-            if(estado_afd1 in final and estado_afd2 in final_2):
-                final_i.append(estado_afd1 + estado_afd2)
-
-    # Setar as transicoes
-    for keys_1 in transitions:
-        for keys_2 in transitions_2:
-            new_state = keys_1+keys_2
-            transitions_i[new_state] = {
-                '1':[transitions[keys_1]['1'][0]+ transitions_2[keys_2]['1'][0]],
-                '0':[transitions[keys_1]['0'][0]+ transitions_2[keys_2]['0'][0]]
-            }
+    # Para esta operacao, eh adicionada uma transicao epslon partido do estado
+    # de aceitacao do primeiro automato para o estado inicial do segundo automato,
+    # este fato decorre de que por ser uma interseccao, ambos os automatos devem
+    # aceitar a palavra inserida, logo, ambos os estados de aceitacao deverao ser
+    # alcancados, um apos o outro.
+    for qF in final_1:
+        if not qF in transitions_1:
+            transitions_1[qF] = {}    
+        if not "e" in transitions_1[qF]:
+            transitions_1[qF]['e'] = []
+        transitions_1[qF]['e'].append(initial_2)
 
     print("Novo automato pos operacao de Interseccao: ")
-    util.infoAutomata(states_i, initial_i, final_i, transitions_i)
-
-
-
-
+    util.infoAutomata(new_states, new_initial, new_final, transitions_1)
 
 # param_1: AFD
 # param_2: word
@@ -72,37 +71,38 @@ def simulator(param_1, param_2):
 # Recebe um AFND e transforma para AFD
 def transform(param_1):
     states, initial, final, transitions = prog.fileParser(param_1)
-    print(prog.afn_checker(transitions))
-    pass
+    print("Novo automato pos operacao de Conversao: ")
+    if not prog.afn_checker(transitions):
+        util.infoAutomata(states, initial, final, transitions)
+    else:
+        prog.automataConverter(states, initial, final, transitions)
 
 # param_1: AFD1
 # param_2: AFD2
 def union(param_1, param_2):
     # Coletando informações sobre os dois automatos.
-    states, initial, final, transitions = prog.fileParser(param_1)
-    states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2)
+    states_1, initial_1, final_1, transitions_1 = prog.fileParser(param_1, 1)
+    states_2, initial_2, final_2, transitions_2 = prog.fileParser(param_2, 2)
 
     # novo estado para unir os automatos. 
-    # Talvez precise fazer uma verificacao antes para nao repetir o nome de um possivel estado ja existente
-    # No caso, criaria uma nome randomico
     new_state = 'q0'
 
     # As seguintes operacoes sao para o novo automato gerado pela UNIAO
 
     # estados
-    states_u = [new_state] + states + states_2
+    states_u = [new_state] + states_1 + states_2
 
     # estado inicial
     initial_u = new_state
 
     # Estados finais
-    final_u = final + final_2
+    final_u = final_1 + final_2
 
     # transicao do estado novo para os antigos estados iniciais
-    transition_initial = {new_state: {'e': [initial, initial_2]}}
+    transition_initial = {new_state: {'e': [initial_1, initial_2]}}
     # Concatenando as transicoes dos automatos
     # Esta forma de concatenar dicionarios eh mais eficiente
-    transitions_u = dict(transition_initial, **transitions)
+    transitions_u = dict(transition_initial, **transitions_1)
     # Unindo as transicoes
     transitions_u.update(transitions_2)
     

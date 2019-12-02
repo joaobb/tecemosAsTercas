@@ -1,0 +1,15 @@
+estados Ø, q0, q1, {q0,q1}, q2, {q0,q2}, {q1,q2}, {q0,q1,q2}
+inicial q0
+aceita q2, {q1,q2}, {q0,q2}, {q0,q1,q2}
+q1 q2 1
+Ø Ø 0
+Ø Ø 1
+{q1,q2} q2 1
+{q0,q1} {q0,q1} 0
+{q0,q1} {q0,q2} 1
+{q0,q2} {q0,q1} 0
+{q0,q2} q0 1
+q0 {q0,q1} 0
+q0 q0 1
+{q0,q1,q2} {q0,q1} 0
+{q0,q1,q2} {q0,q2} 1
