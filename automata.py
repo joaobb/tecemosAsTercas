@@ -1,5 +1,5 @@
 import re
-#EU QUE FIZ NA AULA DE REDES :D
+
 def automataParser(states, initial, final, word, autamataDescription):
     print(initial)
     print(final)

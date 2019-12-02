@@ -1,0 +1,7 @@
+estados q0, q1, q2
+inicial q0
+aceita q2
+q0 q0 0
+q0 q1 0
+q0 q0 1
+q1 q2 1

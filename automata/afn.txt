@@ -1,7 +1,13 @@
-estados A, B, C
+estados A, B, C, D, E
 inicial A
 aceita C
 A B 0
 A A 0
 A A 1
 B C 1
+B E 1
+C B 0
+D E 0
+E D 0
+D E 1
+E D 1
