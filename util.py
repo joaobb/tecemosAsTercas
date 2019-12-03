@@ -61,24 +61,19 @@ def beatifyState(state):
     return "{" + (",".join(map(str,state))) + "}"
 
 def get_epslon_closure(state, transitions):
-    result = []
-    current_states = []
-    current_states += state
-    end = 0
-
+    result = [state]
+    current_states = [state]
+    
     while True:
         new_state = []
 
         for st in current_states:
-            print(st)
             if "e" in transitions[st]:
                 new_state += transitions[st]["e"]
-                end += 1
 
         if not len(new_state):
             return beatifyState(set(result))
         
         result += new_state
         current_states = new_state
-
     
