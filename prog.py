@@ -2,12 +2,8 @@
 
 import re
 import util
-# f=open("ex.txt", "r")
-
-# contents = f.readlines()
 
 states = initial = final = ""
-
 
 def fileParser(fileName, autoN = 0):
     f = open(fileName, "r")
@@ -101,13 +97,8 @@ def afn_checker(transitions):
 def automataConverter(states, initial, final, transitions):
     # Power set dos estados
     states_power_set = util.states_power_set(states)
-    afd_states = util.states_power_set(states)
 
-    # SETa o estado vazio gerado pelo power set, como o estado lixo
-    afd_states[0] = ("Ø")
     transitions["Ø"] = {"0": "Ø", "1": "Ø"}
-    
-    afd_initial = util.get_epslon_closure(initial, transitions)
 
     # Para cada estado no power set de estados
     for ps_state in states_power_set:
@@ -135,12 +126,6 @@ def automataConverter(states, initial, final, transitions):
                     # Realizamos a uniao das transocoes dos sub-estados geradores do estado
                     transitions[ps_state][symbol] += transitions[state][symbol]
 
-    # Formatando os estados textualmente, para que fique na forma {a,b} ou a
-    for i in range(len(afd_states)):
-        if len(afd_states[i]) == 1:
-            afd_states[i] = "".join(map(str,afd_states[i])) 
-        else:
-            afd_states[i] = util.beatifyState(afd_states[i])
     
     # Setando os estados de aceitacao do AFD como todos que possuem em sua composicao
     # ao menos um dos estados de aceitacao da AFN original
@@ -148,4 +133,61 @@ def automataConverter(states, initial, final, transitions):
         if set(transition) & set(final):
             final.append(util.beatifyState(transition))
 
-    util.infoAutomata(afd_states, afd_initial, final, transitions, True)
+    # Define os estados do automato como todos os alcancaveis, limpando assim a saida do programa
+    afd_states = get_reachable_states(initial, transitions)
+
+    # Adiciona o estado lixo aos estados do AFD 
+    afd_states.add(("Ø",))
+
+    # Define as transicoes do afd como todas as que sao possiveis de serem percorridas.
+    afd_transitions = clear_states(transitions, get_reachable_states(initial, transitions))
+
+    # Define o estado inicial do afd, como todos os estados alcançaveis por transicoes epslon,
+    # o chamado eplson closure
+    afd_initial = util.get_epslon_closure(initial, transitions)
+
+    # Formatando os estados textualmente, para que fique na forma {a,b} ou a
+    for st in afd_states.copy():
+        if len(st) == 1:
+            afd_states.remove(st)
+            afd_states.add("".join(map(str,st)))
+        else:
+            afd_states.remove(st)
+            afd_states.add(util.beatifyState(st))
+
+    # Retira todos os estados finais inalcancaveis
+    afd_final = [st for st in final if st in afd_states]
+
+    util.infoAutomata(afd_states, afd_initial, afd_final, afd_transitions, True)
+
+
+def get_reachable_states(state, transitions):
+    current_states = []
+    reachable_states = []
+    
+    current_states += state   
+    reachable_states += state
+
+    while True:
+        new_current_states = []
+
+        for cs in set(current_states): 
+            for st in transitions[cs]:
+                reachable_states.append(tuple(transitions[cs][st]))
+                new_current_states += transitions[cs][st]
+
+        if set(new_current_states) == set(current_states): break    
+        current_states = new_current_states
+
+    reachable_states = set(reachable_states)
+    
+    return reachable_states
+
+def clear_states(transitions, reachable_states):
+    clean_transitions = transitions.copy()
+
+    for st in transitions:
+        if not tuple(st) in reachable_states:
+            del clean_transitions[st]
+
+    return clean_transitions
