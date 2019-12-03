@@ -7,12 +7,17 @@ from random import randint
 def complemento(param_1):
     states, initial, final, transitions = prog.fileParser(param_1)
 
+    if prog.afn_checker(transitions):
+        states, initial, final, transitions = prog.automataConverter(states, initial, final, transitions, False)
+
+    # print(states, initial, final, transitions)
+
     states_c = states
     initial_c = initial
     final_c = util.myFilter(states, final)
     transitions_c = transitions
     print("O complemento do automato é: ")
-    util.infoAutomata(states_c, initial_c, final_c, transitions_c)
+    util.infoAutomata(states_c, initial_c, final_c, transitions_c, True)
 
 # param_1: AFD
 def star(param_1):
