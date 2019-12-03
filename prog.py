@@ -49,7 +49,6 @@ def fileParser(fileName, autoN = 0):
 
     return (states, initial, final, transitions)
 
-
 def wordParser(states, initial, final, transitions, word):
     #Define o estado atual, como o estado inicial do automato
     currentStates = [initial]
@@ -94,7 +93,7 @@ def afn_checker(transitions):
     
     return False
 
-def automataConverter(states, initial, final, transitions):
+def automataConverter(states, initial, final, transitions, output_req = True):
     # Power set dos estados
     states_power_set = util.states_power_set(states)
 
@@ -158,9 +157,14 @@ def automataConverter(states, initial, final, transitions):
     # Retira todos os estados finais inalcancaveis
     afd_final = [st for st in final if st in afd_states]
 
-    util.infoAutomata(afd_states, afd_initial, afd_final, afd_transitions, True)
+    afd_transitions = afn_to_afd_transitions(afd_transitions)
+    
+    if output_req:
+        util.infoAutomata(afd_states, afd_initial, afd_final, afd_transitions, True)
 
+    return(afd_states, afd_initial, afd_final, afd_transitions)
 
+# Retorna todos os estado alcançáveis a partir do estado recebido como parametro.
 def get_reachable_states(state, transitions):
     current_states = []
     reachable_states = []
@@ -183,6 +187,8 @@ def get_reachable_states(state, transitions):
     
     return reachable_states
 
+# Remove da lista de transições todos os estados que são inalcancaveis
+# partindo de um determinado estado.
 def clear_states(transitions, reachable_states):
     clean_transitions = transitions.copy()
 
@@ -191,3 +197,18 @@ def clear_states(transitions, reachable_states):
             del clean_transitions[st]
 
     return clean_transitions
+
+# Renomeia todos os estados, sejam estes origem ou alvo, de forma que todos os estados compostos
+# sejam textualmente da forma {a,b}.
+def afn_to_afd_transitions(transitions):
+    trans_copy = transitions.copy()
+    aux = {}
+
+    for st in trans_copy:
+        for symb in trans_copy[st]:
+            transitions[st][symb] = util.beatifyState(trans_copy[st][symb])
+        aux = transitions[st]
+        del transitions[st]
+        transitions[util.beatifyState(st)] = aux
+
+    return transitions
