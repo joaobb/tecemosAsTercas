@@ -1,5 +1,7 @@
 # tecemosAsTercas
 
+## Projeto desenvolvido para a cadeira de Teoria da Computação.
+
 ## Execução
 Para executar o programa, use o seguinte comando no terminal
 ```
