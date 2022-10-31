@@ -49,8 +49,8 @@ C2 D2 1
 ```
 ---
 ### Operação de união
-A operação de união do projeto foi implementada baseada no Teorema 1.45 do Sipser[2].
-Dado dois automatos A1 e A2, a execução desta operação realiza A1∪A2, de forma que cria um novo estado inicial, este ramifica para os estados iniciais das máquinas anteriores com transições epslon. Desta forma, o automato não deterministicamente adivinha qual das máquinas aceita a entrada.
+A operação de interseção/concatenação de itens é implementada com base no Teorema 1.47 do Sipser[2]. Dados dois autômatos A1 e A2, a execução desta operação realiza A1∩A2, então cria uma transição epslon partindo de cada estado de aceitação de A1 para o estado inicial de A2. Além disso, todos os estados de aceitação de A1 perderão essa classificação e se tornarão estados normais.
+
 #### Exemplo de execução:
 ```
 $ python3 main.py -u ./automata/fda1.txt ./automata/afn2.txt
@@ -96,8 +96,7 @@ B {C,E} 1
 ```
 ---
 ### Operação de simulação
-Esta operação de simulação do projeto foi implementada baseada em devaneios que acontecera durante uma aula de redes.
-Dado um automato A e uma palavra W, a execução desta operação realiza o teste se o automato A aceita a palavra W,  e consequentemente afirmar que a palavra W faz parte da linguagem L(A). Esta operação é executada basicamente percorrendo a "matriz" de mapas de transições criadas anteriormente. Caso o algum dos estados que percorrem o automato esteja no estado de aceitação, é afirmado que o automato aceita a palavra.
+Esta operação de simulação de projeto é baseada em um devaneio ocorrido em uma aula online. Dado um autômato A e uma palavra W, se o autômato A aceita a palavra W, fazendo isso realiza um teste confirmando que a palavra W faz parte da linguagem L(A). Esta operação é realizada basicamente percorrendo a "matriz" do grafo de transformação criado anteriormente. Se algum estado que passa pelo autômato estiver no estado de aceitação, o autômato aceita a palavra.
 #### Exemplo de execução
 ```
 #Todos os blocos de 1 em W são de comprimento impar
